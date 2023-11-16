@@ -198,7 +198,27 @@ losses = [] #Initialize an empty list to store the loss values
 epochs =[] #Initialize an empy list to store the epochs
 
 #Remember: For storing the arrays epochs [] and loss[] use the segment of the SaveCopy.
+# Training loop
+num_epochs = 1000
+losses = [] #Initialize an empty list to store the loss values
+epochs =[] #Initialize an empy list to store the epochs
 
+for epoch in range(num_epochs):
+    model.train()
+    epoch_loss=0.0 #initialize the epoch loss
+    for batch_X, batch_Y in train_loader:
+        optimizer.zero_grad()
+        output = model(batch_X)
+        loss = criterion(output, batch_Y)
+        loss.backward()
+        optimizer.step()
+        epoch_loss += loss.item()  # Accumulate loss for this epoch
+        losses.append(epoch_loss / len(train_loader))  # Calculate average loss for the epoch
+        
+        epochs.append(epoch+1) 
+    epoch_loss /= len(train_loader)
+    
+    print(f"Epoch [{epoch+1}/{num_epochs}] Loss: {epoch_loss / len(train_loader)}")
 
 
 # Plot the loss over epochs - better to use the SaveCopy plotting section
